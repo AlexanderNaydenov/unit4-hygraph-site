@@ -10,7 +10,8 @@ Copy `env.example` to `.env.local` and fill in values from Hygraph **Project Set
 
 | Variable | Purpose |
 |----------|---------|
-| `NEXT_PUBLIC_HYGRAPH_ENDPOINT` | Content API URL (CDN / high-performance endpoint recommended). |
+| `HYGRAPH_ENDPOINT` | **Same URL as below**, server-only. Read at runtime on Vercel so pages work even when `NEXT_PUBLIC_*` was not present during `next build` (avoids silent 404s). |
+| `NEXT_PUBLIC_HYGRAPH_ENDPOINT` | Content API URL (CDN / high-performance endpoint recommended). Required for client-side preview (`PreviewWrapper`). |
 | `NEXT_PUBLIC_HYGRAPH_STUDIO_URL` | Studio host, **no trailing slash** (required for click-to-edit). |
 | `PREVIEW_TOKEN` | Permanent auth token whose **default stage is DRAFT** (preview + draft). |
 | `PRODUCTION_TOKEN` | Permanent auth token whose **default stage is PUBLISHED** (production traffic). |
@@ -56,10 +57,12 @@ Docs: [Click to edit](https://hygraph.com/docs/developer-guides/schema/click-to-
 
 ## Troubleshooting (404s after adding tokens)
 
-1. **Redeploy** after changing environment variables so the runtime picks them up.
-2. GraphQL variables for `locales` must be declared as **`[Locale!]!`** (non-null list). This project uses that shape; older builds without it could not resolve content.
-3. Use the **CDN / high-performance** Content API URL from Hygraph if that is what your token is scoped to (check token audience in Project Settings).
-4. Ensure the **production** token’s default stage is **PUBLISHED** and it has **read** permission for `LandingPage`, `Product`, and `SiteSettings`.
+1. Set **`HYGRAPH_ENDPOINT`** in Vercel (same value as `NEXT_PUBLIC_HYGRAPH_ENDPOINT`) and **redeploy**. Next.js bakes `NEXT_PUBLIC_*` in at build time; if the endpoint was missing then, server fetches see an empty URL until you add the server-only variable or rebuild with all public env vars set.
+2. **Redeploy** after changing environment variables so the runtime picks them up.
+3. GraphQL variables for `locales` must be declared as **`[Locale!]!`** (non-null list). This project uses that shape; older builds without it could not resolve content.
+4. Use the **CDN / high-performance** Content API URL from Hygraph if that is what your token is scoped to (check token audience in Project Settings).
+5. Ensure the **production** token’s default stage is **PUBLISHED** and it has **read** permission for `LandingPage`, `Product`, and `SiteSettings`.
+6. Confirm the endpoint URL has no typos (e.g. must start with `https://`, not `ishttps://`).
 
 ## Local development
 

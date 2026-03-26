@@ -4,13 +4,25 @@ type HygraphResponse<T> = { data?: T; errors?: { message: string }[] };
 
 const DEFAULT_LOCALE = "en";
 
+/**
+ * Server-side fetches must not rely only on NEXT_PUBLIC_* — those are inlined at
+ * `next build` time. If the endpoint was missing during the Vercel build, it
+ * stays empty and every page 404s. `HYGRAPH_ENDPOINT` is read at runtime.
+ */
+function getHygraphContentEndpoint(): string | undefined {
+  const raw =
+    process.env.HYGRAPH_ENDPOINT?.trim() ||
+    process.env.NEXT_PUBLIC_HYGRAPH_ENDPOINT?.trim();
+  return raw || undefined;
+}
+
 export async function hygraphFetch<T>(
   query: string,
   variables?: Record<string, unknown>,
   options?: { draft: boolean },
 ): Promise<T> {
   const draft = options?.draft ?? false;
-  const endpoint = process.env.NEXT_PUBLIC_HYGRAPH_ENDPOINT;
+  const endpoint = getHygraphContentEndpoint();
   const previewToken = process.env.PREVIEW_TOKEN;
   const productionToken = process.env.PRODUCTION_TOKEN;
 
