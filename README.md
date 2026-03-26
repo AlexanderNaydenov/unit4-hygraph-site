@@ -2,6 +2,8 @@
 
 Next.js App Router frontend that mirrors the Unit4 visual language (greens, typography, marketing layout) and pulls content from Hygraph. Includes **Live Preview** (draft mode + iframe cookies), **Preview SDK / click-to-edit** attributes, and separate **preview** vs **production** API tokens.
 
+**Deployed (Vercel):** [https://unit4-hygraph-site.vercel.app](https://unit4-hygraph-site.vercel.app) — add Hygraph env vars in the Vercel project settings before content will load.
+
 ## Environment variables
 
 Copy `env.example` to `.env.local` and fill in values from Hygraph **Project Settings → Access**.
