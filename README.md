@@ -4,7 +4,7 @@ Next.js App Router frontend that mirrors the Unit4 visual language (greens, typo
 
 ## Environment variables
 
-Copy `.env.example` to `.env.local` and fill in values from Hygraph **Project Settings → Access**.
+Copy `env.example` to `.env.local` and fill in values from Hygraph **Project Settings → Access**.
 
 | Variable | Purpose |
 |----------|---------|
@@ -56,7 +56,7 @@ Docs: [Click to edit](https://hygraph.com/docs/developer-guides/schema/click-to-
 
 ```bash
 npm install
-cp .env.example .env.local
+cp env.example .env.local
 # edit .env.local
 npm run dev
 ```
