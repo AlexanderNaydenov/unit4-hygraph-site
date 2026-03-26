@@ -20,6 +20,8 @@ export function PreviewWrapper({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
+  const studio = studioUrl.replace(/\/+$/, "");
+
   return (
     <HygraphPreview
       debug={process.env.NODE_ENV === "development"}
@@ -38,7 +40,7 @@ export function PreviewWrapper({ children }: { children: React.ReactNode }) {
           borderWidth: "2px",
         },
       }}
-      studioUrl={studioUrl}
+      studioUrl={studio}
       sync={{ fieldFocus: true, fieldUpdate: false }}
     >
       {children}

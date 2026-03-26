@@ -32,11 +32,9 @@ export async function getSiteSettings() {
       { locales: variablesLocale.locales },
       { draft },
     );
-  } catch (e) {
-    if (e instanceof Error && e.message === "MISSING_HYGRAPH_CONFIG") {
-      return { siteSettingsCollection: [] };
-    }
-    throw e;
+  } catch {
+    // Invalid token, network, GraphQL errors — keep shell usable
+    return { siteSettingsCollection: [] };
   }
 }
 
@@ -66,11 +64,8 @@ export async function getLandingBySlug(slug: string) {
       { draft },
     );
     return data.landingPages[0] ?? null;
-  } catch (e) {
-    if (e instanceof Error && e.message === "MISSING_HYGRAPH_CONFIG") {
-      return null;
-    }
-    throw e;
+  } catch {
+    return null;
   }
 }
 
@@ -102,10 +97,7 @@ export async function getProductBySlug(slug: string) {
       { draft },
     );
     return data.products[0] ?? null;
-  } catch (e) {
-    if (e instanceof Error && e.message === "MISSING_HYGRAPH_CONFIG") {
-      return null;
-    }
-    throw e;
+  } catch {
+    return null;
   }
 }

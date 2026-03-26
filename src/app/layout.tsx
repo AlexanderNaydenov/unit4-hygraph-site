@@ -4,6 +4,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { PreviewWrapper } from "@/components/PreviewWrapper";
+import { getMetadataBase } from "@/lib/metadata-base";
 import { getSiteSettings } from "@/lib/get-page-data";
 
 import "./globals.css";
@@ -21,9 +22,7 @@ export const metadata: Metadata = {
   },
   description:
     "Finance, HR, projects, and procurement on the AI-powered Unit4 Platform.",
-  metadataBase: process.env.NEXT_PUBLIC_SITE_URL
-    ? new URL(process.env.NEXT_PUBLIC_SITE_URL)
-    : undefined,
+  metadataBase: getMetadataBase(),
 };
 
 export default async function RootLayout({
@@ -36,17 +35,13 @@ export default async function RootLayout({
   let headerCtaUrl: string | null = null;
   let footerTagline: string | null = null;
 
-  try {
-    const { siteSettingsCollection } = await getSiteSettings();
-    const s = siteSettingsCollection[0];
-    if (s) {
-      siteName = s.siteName;
-      headerCtaLabel = s.headerCtaLabel;
-      headerCtaUrl = s.headerCtaUrl;
-      footerTagline = s.footerTagline;
-    }
-  } catch {
-    // Hygraph not configured locally — fall back to static shell
+  const { siteSettingsCollection } = await getSiteSettings();
+  const s = siteSettingsCollection[0];
+  if (s) {
+    siteName = s.siteName;
+    headerCtaLabel = s.headerCtaLabel;
+    headerCtaUrl = s.headerCtaUrl;
+    footerTagline = s.footerTagline;
   }
 
   return (

@@ -22,15 +22,21 @@ export async function GET(request: Request) {
     return new Response("Missing slug", { status: 400 });
   }
 
-  const data = await hygraphFetch<ValidateDraftQuery>(
-    VALIDATE_DRAFT_SLUG,
-    {
-      slug,
-      stage: "DRAFT",
-      locales: variablesLocale.locales,
-    },
-    { draft: true },
-  );
+  let data: ValidateDraftQuery;
+  try {
+    data = await hygraphFetch<ValidateDraftQuery>(
+      VALIDATE_DRAFT_SLUG,
+      {
+        slug,
+        stage: "DRAFT",
+        locales: variablesLocale.locales,
+      },
+      { draft: true },
+    );
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Hygraph request failed";
+    return new Response(`Preview setup failed: ${msg}`, { status: 502 });
+  }
 
   const landing = data.landingPages[0];
   const product = data.products[0];
