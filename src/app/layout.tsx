@@ -32,7 +32,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   let siteName = "Unit4";
-  let logoUrl: string | null = null;
   let headerCtaLabel: string | null = null;
   let headerCtaUrl: string | null = null;
   let footerTagline: string | null = null;
@@ -42,7 +41,6 @@ export default async function RootLayout({
     const s = siteSettingsCollection[0];
     if (s) {
       siteName = s.siteName;
-      logoUrl = s.logo?.url ?? null;
       headerCtaLabel = s.headerCtaLabel;
       headerCtaUrl = s.headerCtaUrl;
       footerTagline = s.footerTagline;
@@ -58,7 +56,6 @@ export default async function RootLayout({
           <Header
             ctaLabel={headerCtaLabel}
             ctaUrl={headerCtaUrl}
-            logoUrl={logoUrl}
             siteName={siteName}
           />
           <main className="flex-1">{children}</main>

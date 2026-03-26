@@ -1,14 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 
+const LOGO_SRC = "/unit4-logo.png";
+
 export function Header({
   siteName,
-  logoUrl,
   ctaLabel,
   ctaUrl,
 }: {
   siteName: string;
-  logoUrl?: string | null;
   ctaLabel?: string | null;
   ctaUrl?: string | null;
 }) {
@@ -16,21 +16,16 @@ export function Header({
     <header className="sticky top-0 z-50 border-b border-black/5 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link className="flex items-center gap-3" href="/">
-          {logoUrl ? (
-            <span className="relative block h-8 w-28">
-              <Image
-                alt={siteName}
-                className="object-contain object-left"
-                fill
-                priority
-                src={logoUrl}
-              />
-            </span>
-          ) : (
-            <span className="text-lg font-semibold tracking-tight text-[#04543f]">
-              {siteName}
-            </span>
-          )}
+          <span className="relative block h-9 w-[7.5rem] shrink-0">
+            <Image
+              alt={siteName}
+              className="object-contain object-left"
+              fill
+              priority
+              sizes="120px"
+              src={LOGO_SRC}
+            />
+          </span>
         </Link>
         <nav className="hidden items-center gap-8 text-sm font-medium text-zinc-700 md:flex">
           <Link className="hover:text-[#04543f]" href="/solutions-overview">
