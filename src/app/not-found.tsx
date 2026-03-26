@@ -9,7 +9,15 @@ export default function NotFound() {
       <h1 className="mt-4 text-3xl font-semibold text-zinc-900">Page not found</h1>
       <p className="mt-3 text-zinc-600">
         This page doesn’t exist or Hygraph isn’t configured. Check your environment variables and
-        content entry slugs.
+        content entry slugs. If you used Live Preview, try{" "}
+        <Link className="text-[#04543f] underline" href="/api/disable-draft">
+          exiting draft mode
+        </Link>{" "}
+        or open{" "}
+        <Link className="text-[#04543f] underline" href="/api/hygraph-health">
+          /api/hygraph-health
+        </Link>{" "}
+        to verify the Content API.
       </p>
       <Link
         className="mt-8 rounded-full bg-[#04543f] px-6 py-3 text-sm font-semibold text-white"

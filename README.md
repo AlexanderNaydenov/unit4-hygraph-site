@@ -57,12 +57,13 @@ Docs: [Click to edit](https://hygraph.com/docs/developer-guides/schema/click-to-
 
 ## Troubleshooting (404s after adding tokens)
 
-1. Set **`HYGRAPH_ENDPOINT`** in Vercel (same value as `NEXT_PUBLIC_HYGRAPH_ENDPOINT`) and **redeploy**. Next.js bakes `NEXT_PUBLIC_*` in at build time; if the endpoint was missing then, server fetches see an empty URL until you add the server-only variable or rebuild with all public env vars set.
-2. **Redeploy** after changing environment variables so the runtime picks them up.
-3. GraphQL variables for `locales` must be declared as **`[Locale!]!`** (non-null list). This project uses that shape; older builds without it could not resolve content.
-4. Use the **CDN / high-performance** Content API URL from Hygraph if that is what your token is scoped to (check token audience in Project Settings).
-5. Ensure the **production** token’s default stage is **PUBLISHED** and it has **read** permission for `LandingPage`, `Product`, and `SiteSettings`.
-6. Confirm the endpoint URL has no typos (e.g. must start with `https://`, not `ishttps://`).
+1. Open **`/api/hygraph-health`** on your deployment. It reports whether the Content API URL and tokens are set and whether a `home` landing page resolves (no secrets exposed). If `draftMode` is `true` and content still fails, visit **`/api/disable-draft`** and reload — preview uses `PREVIEW_TOKEN`; a bad preview token used to make every page 404 while the draft cookie was set (this app now falls back to published content when draft fails).
+2. Set **`HYGRAPH_ENDPOINT`** in Vercel (same value as `NEXT_PUBLIC_HYGRAPH_ENDPOINT`) and **redeploy**. Next.js bakes `NEXT_PUBLIC_*` in at build time; if the endpoint was missing then, server fetches see an empty URL until you add the server-only variable or rebuild with all public env vars set.
+3. **Redeploy** after changing environment variables so the runtime picks them up.
+4. GraphQL variables for `locales` must be declared as **`[Locale!]!`** (non-null list). This project uses that shape; older builds without it could not resolve content.
+5. Use the **CDN / high-performance** Content API URL from Hygraph if that is what your token is scoped to (check token audience in Project Settings).
+6. Ensure the **production** token’s default stage is **PUBLISHED** and it has **read** permission for `LandingPage`, `Product`, and `SiteSettings`.
+7. Confirm the endpoint URL has no typos (e.g. must start with `https://`, not `ishttps://`).
 
 ## Local development
 

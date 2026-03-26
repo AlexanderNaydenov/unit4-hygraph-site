@@ -45,7 +45,8 @@ export async function hygraphFetch<T>(
       "gcms-stage": draft ? "DRAFT" : "PUBLISHED",
     },
     body: JSON.stringify({ query, variables }),
-    next: draft ? { revalidate: 0 } : { revalidate: 60 },
+    // Avoid Next.js caching GraphQL responses; content must reflect current env/tokens.
+    cache: "no-store",
   });
 
   if (!res.ok) {
