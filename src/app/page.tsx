@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { SectionRenderer } from "@/components/sections/SectionRenderer";
 import { getLandingBySlug } from "@/lib/get-page-data";
 
-export const revalidate = 60;
+/** Always render from Hygraph at request time (avoids stale 404s from builds without env). */
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getLandingBySlug("home");

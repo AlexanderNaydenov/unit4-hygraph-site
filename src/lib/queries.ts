@@ -106,7 +106,7 @@ export const SECTIONS_FRAGMENT = `
 `;
 
 export const SITE_SETTINGS_QUERY = `
-  query SiteSettings($locales: [Locale!]) {
+  query SiteSettings($locales: [Locale!]!) {
     siteSettingsCollection(locales: $locales) {
       id
       siteName
@@ -119,7 +119,7 @@ export const SITE_SETTINGS_QUERY = `
 `;
 
 export const LANDING_BY_SLUG = `
-  query LandingBySlug($slug: String!, $stage: Stage!, $locales: [Locale!]) {
+  query LandingBySlug($slug: String!, $stage: Stage!, $locales: [Locale!]!) {
     landingPages(where: { slug: $slug }, stage: $stage, locales: $locales) {
       id
       title
@@ -135,7 +135,7 @@ export const LANDING_BY_SLUG = `
 `;
 
 export const PRODUCT_BY_SLUG = `
-  query ProductBySlug($slug: String!, $stage: Stage!, $locales: [Locale!]) {
+  query ProductBySlug($slug: String!, $stage: Stage!, $locales: [Locale!]!) {
     products(where: { slug: $slug }, stage: $stage, locales: $locales) {
       id
       name
@@ -153,7 +153,7 @@ export const PRODUCT_BY_SLUG = `
 `;
 
 export const VALIDATE_DRAFT_SLUG = `
-  query ValidateDraft($slug: String!, $stage: Stage!, $locales: [Locale!]) {
+  query ValidateDraft($slug: String!, $stage: Stage!, $locales: [Locale!]!) {
     landingPages(where: { slug: $slug }, stage: $stage, locales: $locales) {
       id
       slug

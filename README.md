@@ -54,6 +54,13 @@ Docs: [Click to edit](https://hygraph.com/docs/developer-guides/schema/click-to-
 - Disable **Deployment Protection** (or equivalent) for preview if the iframe is blocked (`X-Frame-Options`).
 - Set all environment variables on the project for Production and Preview.
 
+## Troubleshooting (404s after adding tokens)
+
+1. **Redeploy** after changing environment variables so the runtime picks them up.
+2. GraphQL variables for `locales` must be declared as **`[Locale!]!`** (non-null list). This project uses that shape; older builds without it could not resolve content.
+3. Use the **CDN / high-performance** Content API URL from Hygraph if that is what your token is scoped to (check token audience in Project Settings).
+4. Ensure the **production** token’s default stage is **PUBLISHED** and it has **read** permission for `LandingPage`, `Product`, and `SiteSettings`.
+
 ## Local development
 
 ```bash

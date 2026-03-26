@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { SectionRenderer } from "@/components/sections/SectionRenderer";
 import { getLandingBySlug } from "@/lib/get-page-data";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ slug: string }> };
 
