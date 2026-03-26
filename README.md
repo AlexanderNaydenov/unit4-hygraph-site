@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Unit4-style Hygraph + Next.js site
 
-## Getting Started
+Next.js App Router frontend that mirrors the Unit4 visual language (greens, typography, marketing layout) and pulls content from Hygraph. Includes **Live Preview** (draft mode + iframe cookies), **Preview SDK / click-to-edit** attributes, and separate **preview** vs **production** API tokens.
 
-First, run the development server:
+## Environment variables
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Copy `.env.example` to `.env.local` and fill in values from Hygraph **Project Settings → Access**.
+
+| Variable | Purpose |
+|----------|---------|
+| `NEXT_PUBLIC_HYGRAPH_ENDPOINT` | Content API URL (CDN / high-performance endpoint recommended). |
+| `NEXT_PUBLIC_HYGRAPH_STUDIO_URL` | Studio host, **no trailing slash** (required for click-to-edit). |
+| `PREVIEW_TOKEN` | Permanent auth token whose **default stage is DRAFT** (preview + draft). |
+| `PRODUCTION_TOKEN` | Permanent auth token whose **default stage is PUBLISHED** (production traffic). |
+| `HYGRAPH_PREVIEW_SECRET` | Shared secret used only by `/api/draft` and the Hygraph preview URL template. |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URL (e.g. `https://your-app.vercel.app`) for metadata. |
+
+## Hygraph Studio: Live Preview
+
+1. In **Schema**, open each model that should preview (**Landing page**, **Product**).
+2. Open the **Sidebar** tab → add **Preview**.
+3. **URL templates** (replace `YOUR_DOMAIN` and `YOUR_SECRET`):
+
+**Landing page**
+
+```text
+https://YOUR_DOMAIN/api/draft?secret=YOUR_SECRET&slug={slug}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Product** (use `type=product` so the draft route resolves the correct route and `/products/[slug]`)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+https://YOUR_DOMAIN/api/draft?secret=YOUR_SECRET&slug={slug}&type=product
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Use the same `YOUR_SECRET` value as `HYGRAPH_PREVIEW_SECRET` in Vercel.
 
-## Learn More
+- Preview must use **DRAFT** stage — this app uses `PREVIEW_TOKEN` when `draftMode()` is enabled (after `/api/draft`).
+- See [Live preview](https://hygraph.com/docs/developer-guides/schema/live-preview) and [Troubleshooting](https://hygraph.com/docs/developer-guides/schema/live-preview#troubleshooting) (iframe CSP, Vercel deployment protection).
 
-To learn more about Next.js, take a look at the following resources:
+## Click-to-edit
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [`@hygraph/preview-sdk`](https://github.com/hygraph/preview-sdk) wraps the app in `PreviewWrapper` (`src/components/PreviewWrapper.tsx`).
+- Section blocks use `data-hygraph-entry-id` and `data-hygraph-field-api-id` (and component chains for nested blocks).
+- Landing pages: `title` is tagged on the `[slug]` layout; home uses a screen-reader-only `title` for the same field.
+- Products: `name` and `summary` are tagged on `src/app/products/[slug]/page.tsx`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Docs: [Click to edit](https://hygraph.com/docs/developer-guides/schema/click-to-edit), [Next.js App Router](https://hygraph.com/docs/developer-guides/schema/click-to-edit-next-js).
 
-## Deploy on Vercel
+## Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Disable **Deployment Protection** (or equivalent) for preview if the iframe is blocked (`X-Frame-Options`).
+- Set all environment variables on the project for Production and Preview.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Local development
+
+```bash
+npm install
+cp .env.example .env.local
+# edit .env.local
+npm run dev
+```
+
+Draft preview locally: open  
+`http://localhost:3000/api/draft?secret=YOUR_SECRET&slug=home`  
+(or another slug, and `?type=product` for products).
+
+## Routes
+
+| Path | Source |
+|------|--------|
+| `/` | Landing page with `slug` = `home` |
+| `/[slug]` | Other landing pages |
+| `/products/[slug]` | Products |
+
+## Disclaimer
+
+This is a demo layout inspired by public Unit4 marketing patterns. It is not an official Unit4 product.
